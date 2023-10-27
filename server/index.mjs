@@ -1,10 +1,15 @@
 import express from 'express';
-import './services/passport.mjs'
 import { Route as authRoute} from './routes/authRoute.mjs';
+import { MongoDb } from './config/key.mjs';
+import mongoose from 'mongoose';
+import './models/User.mjs'
+import './services/passport.mjs'
+
+mongoose.connect(MongoDb.mongoURI);
 
 const app = express();
 
-authRoute(app)
+authRoute(app);
 
 // deployment checklist
 // https://feedback-hub-ely6.onrender.com/
