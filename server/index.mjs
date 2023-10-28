@@ -1,13 +1,13 @@
 import express from 'express';
 import { Route as authRoute} from './routes/authRoute.mjs';
-import { MongoDb, CookieKey } from './config/key.mjs';
+import { key } from './config/key.mjs';
 import mongoose from 'mongoose';
 import cookieSession from 'cookie-session';
 import passport from 'passport';
 import './models/User.mjs'
 import './services/passport.mjs'
 
-mongoose.connect(MongoDb.mongoURI);
+mongoose.connect(key.mongoURI);
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(
 	cookieSession({
 		//configuration object
 		maxAge: 30 * 24 * 60 * 60 * 1000,
-		keys: [CookieKey.cookieKey]
+		keys: [key.cookieKey]
 	})
 )
 app.use(passport.initialize());

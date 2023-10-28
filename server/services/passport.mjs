@@ -1,16 +1,26 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'; 
-import GoogleKey from '../config/key.mjs';
+import { key } from '../config/key.mjs';
 import mongoose from 'mongoose';
 import passport from 'passport';
 
 const User = mongoose.model('users');
 
+// serialise user into token as identified piece of user
+passport.serializeUser((user, done) => {
+	done(null, user.id);
+})
+
+// deserlise user
+passport.deserializeUser((id, done) => {
+	User.findById(id).then(user => done(null, user));
+})
+
 // create new instance of google passport strategy
 // passport.use is a generic command to connect and perform task on database
 passport.use(
 	new GoogleStrategy({
-		clientID: GoogleKey.googleClientId,
-		clientSecret: GoogleKey.googleClientSecret,
+		clientID: key.googleClientId,
+		clientSecret: key.googleClientSecret,
 		callbackURL: "/auth/google/callback",
 		}, 
 		(accessToken, refreshToken, profile, done) => {
